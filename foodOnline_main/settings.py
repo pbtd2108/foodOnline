@@ -97,3 +97,4 @@ EMAIL_PORT=  config('EMAIL_PORT', cast=int)
 EMAIL_HOST_USER=  config('EMAIL_HOST_USER')
 EMAIL_HOSt_PASSWORD =  config('EMAIL_HOSt_PASSWORD')
 EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL="foodOnline Marketplace <prabhatidubey@outlook.com>"
