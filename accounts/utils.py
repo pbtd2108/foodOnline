@@ -41,19 +41,13 @@ def send_verification_email(request,user):
 def sendActivation_mail(request,user,email_subject, email_template):
 #credentials
     email_user ='prabhatidubey@outlook.com'
-    print("sendActivation_mail email_user", email_user)
     email_pass = 'God@1110'
-
-    contacts =  [user.email,] # ['vivekchauhan14@hotmail.com']
-    sender = email_user
-    to = contacts
-
+    # contacts =  [user.email,] # ['vivekchauhan14@hotmail.com'] 
     msg = EmailMessage()
     msg['Subject'] = email_subject #"Please activate your account"
-    msg['From'] = sender
-    msg['To'] = ', '.join(contacts)
-    msg.set_content('YOUR EMAIL MESSAGE HERE')
-    message= render_to_string(email_template, {
+    msg['From'] = email_user
+    msg['To'] = ', '.join( [user.email,])
+    message = render_to_string(email_template, {
         'user' : user,
         'domain': '127.0.0.1:8000',
         'uid' : urlsafe_base64_encode(force_bytes(user.pk)),
@@ -64,10 +58,9 @@ def sendActivation_mail(request,user,email_subject, email_template):
     msg.set_content(message)
     try:
         with smtplib.SMTP('smtp-mail.outlook.com', 587) as smtp:
-            print("utils ....... inside try ............")
             smtp.starttls()
             smtp.login(email_user, email_pass)
-            print("after login ........................")
+            print("sending activation email ........................")
             smtp.send_message(msg)
     except Exception as e:
         print(e)
@@ -107,3 +100,29 @@ def send_password_reset_email(request,user):
     except Exception as e:
         print(e)
     
+
+
+def send_notification(mail_subject,mail_template,context):
+    email_user = 'amarsc28041972@rediffmail.com'#'prabhatidubey@outlook.com'
+    # print("sendActivation_mail email_user", email_user)
+    email_pass= 'Bhopal@123'#'God@1110'    
+    # contacts =  context['user'].email# ['vivekchauhan14@hotmail.com']
+
+    msg = EmailMessage()
+    msg['Subject'] = mail_subject #"Please activate your account"
+    msg['From'] = email_user
+    msg['To'] = context['user'].email
+   
+    message= render_to_string(mail_template,context)
+    
+    print("message: &&  ** ", message)
+    msg.set_content(message)
+    try:
+        with smtplib.SMTP('smtp-mail.outlook.com', 587) as smtp:
+            print("utils ....... send_notification ............")
+            smtp.starttls()
+            smtp.login(email_user, email_pass)
+            print("after login send_notification........................")
+            # smtp.send_message(msg)
+    except Exception as e:
+        print(e)

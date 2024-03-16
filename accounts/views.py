@@ -11,8 +11,22 @@ from .utils import detectUser,send_verification_email,sendActivation_mail,send_p
 from django.utils.http import urlsafe_base64_decode
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
+from vendor.models import Vendor
+from django.core.exceptions import PermissionDenied
 
 # Create your views here.
+
+def check_role_vendor(user):
+    if user.role==1:
+        return True
+    else:
+        raise PermissionDenied
+    
+def check_role_customer(user):
+    if user.role ==2:
+        return True
+    else:
+        raise PermissionDenied
 
 def registeruser(request):
     if request.user.is_authenticated:
@@ -23,12 +37,6 @@ def registeruser(request):
         form=UserForm(request.POST)
 
         if form.is_valid():
-            # password=form.cleaned_data['password']
-            # user=form.save(commit=False)
-            # user.set_password(password)
-            # user.role=User.CUSTOMER
-            # form.save()
-            # return redirect('registeruser')
             first_name=form.cleaned_data['first_name']
             last_name=form.cleaned_data['last_name']
             username=form.cleaned_data['username']
